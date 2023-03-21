@@ -21,7 +21,9 @@ const startTimer = (e) => {
   let { total, hours, minutes, seconds } 
               = getTimeRemaining(e);
   if (total >= 0) {
-
+      if ( (getTimeRemaining(e).seconds - 5) == 8 ) {
+        console.log("Thirteen seconds remaining")
+      }
       // update the timer
       // check if less than 10 then we need to 
       // add '0' at the beginning of the variable
@@ -39,7 +41,7 @@ const clearTimer = (e) => {
   // If you adjust it you should also need to
   // adjust the Endtime formula we are about
   // to code next    
-  setTimer('00:00:10');
+  setTimer('00:00:15');
 
   // If you try to remove this line the 
   // updating of timer Variable will be
@@ -56,7 +58,8 @@ const getDeadTime = () => {
 
   // This is where you need to adjust if 
   // you entend to add more time
-  deadline.setSeconds(deadline.getSeconds() + 10);
+  deadline.setSeconds(deadline.getSeconds() + 15);
+  // deadline.getMinutes(deadline.getMinutes() + 30);
   return deadline;
 }
 
@@ -77,6 +80,11 @@ const onClickReset = () => {
           Maplestory Verus Hilla Timer
         </h2>
         <h2>{timer}</h2>
+        <div>
+          <input type="radio" value="thresh1" name="healthThreshold" /> More than 66%
+          <input type="radio" value="thresh2" name="healthThreshold" /> Less than 66% More than 33%
+          <input type="radio" value="thresh3" name="healthThreshold" /> Less than 33%
+        </div>
         <button onClick={onClickReset}>Reset</button>
       </header>
     </div>
