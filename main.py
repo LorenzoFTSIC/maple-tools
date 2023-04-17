@@ -1,6 +1,10 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
+from win32api import GetSystemMetrics
+
+print("Width = ", GetSystemMetrics(0))
+print("Height = ", GetSystemMetrics(1))
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -23,7 +27,14 @@ class App(customtkinter.CTk):
 
         # configure window
         self.title("Eclisoul's Maple Tools")
-        self.geometry(f"{1100}x{580}")
+        # self.geometry(f"{1100}x{580}")
+        monitorX = GetSystemMetrics(0)
+        if monitorX > 1080:
+            print("Resolution higher than 1080p") 
+            self.geometry(f"{1600}x{900}")
+        else:
+            print("Standard or smaller resolution")
+            self.geometry(f"{1000}x{500}")
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -152,7 +163,7 @@ class App(customtkinter.CTk):
         # self.scrollable_frame_switches[4].select()
         # self.radio_button_3.configure(state="disabled")
         # self.appearance_mode_optionemenu.set("Dark")
-        # self.scaling_optionemenu.set("100%")
+        self.scaling_optionemenu.set("100%")
         # self.optionmenu_1.set("CTkOptionmenu")
         # self.combobox_1.set("CTkComboBox")
         # self.slider_1.configure(command=self.progressbar_2.set)
