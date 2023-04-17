@@ -50,17 +50,19 @@ class App(customtkinter.CTk):
         # self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # create textbox
-        self.textbox = customtkinter.CTkTextbox(self, width=250)
-        self.textbox.grid(row=0, column=1, rowspan=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        # self.textbox = customtkinter.CTkTextbox(self, width=250)
+        # self.textbox.grid(row=0, column=1, rowspan=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # create tabview
-        # self.tabview = customtkinter.CTkTabview(self, width=250)
-        # self.tabview.grid(row=0, column=2, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        # self.tabview.add("CTkTabview")
-        # self.tabview.add("Tab 2")
-        # self.tabview.add("Tab 3")
-        # self.tabview.tab("CTkTabview").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
-        # self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
+        self.tabview = customtkinter.CTkTabview(self, width=250)
+        self.tabview.grid(row=0, rowspan=3, column=1, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        self.tabview.add("Normal Vhilla")
+        self.tabview.add("Hard Vhilla")
+        self.tabview.tab("Normal Vhilla").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        self.tabview.tab("Hard Vhilla").grid_columnconfigure(0, weight=1)
+
+        # Create labels for Vhilla within the tabs
+        # self.label = customtkinter.CTkLabel(text="Test", master=self.tab("Hard Vhilla"))
 
         # self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tabview.tab("CTkTabview"), dynamic_resizing=False,
         #                                                 values=["Value 1", "Value 2", "Value Long Long Long"])
@@ -126,8 +128,10 @@ class App(customtkinter.CTk):
         # self.checkbox_3.grid(row=3, column=0, pady=20, padx=20, sticky="n")
 
         # set default values
+        self.sidebar_button_1.configure(text="Vhilla Timer")
         self.sidebar_button_2.configure(state="disabled", text="(WIP) Rank Check")
         self.sidebar_button_3.configure(state="disabled", text="(WIP) Level ETA")
+        self.tabview.set("Hard Vhilla")
         # self.checkbox_3.configure(state="disabled")
         # self.checkbox_1.select()
         # self.scrollable_frame_switches[0].select()
