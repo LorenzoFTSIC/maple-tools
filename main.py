@@ -5,6 +5,17 @@ import customtkinter
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
+class MyTabView(customtkinter.CTkTabview):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+
+        # create tabs
+        self.add("Normal Vhilla")
+        self.add("Hard Vhilla")
+
+        # add widgets on tabs
+        self.label = customtkinter.CTkLabel(master=self.tab("Normal Vhilla"))
+        self.label.grid(row=0, column=0, padx=20, pady=10)
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -38,7 +49,7 @@ class App(customtkinter.CTk):
         self.appearance_mode_optionemenu.grid(row=6, column=0, padx=20, pady=(10, 10))
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
         self.scaling_label.grid(row=7, column=0, padx=20, pady=(10, 0))
-        self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["80%", "90%", "100%", "110%", "120%"],
+        self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["40%", "60%", "80%", "90%", "100%", "110%", "120%", "150%", "200%"],
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
 
@@ -54,12 +65,15 @@ class App(customtkinter.CTk):
         # self.textbox.grid(row=0, column=1, rowspan=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # create tabview
-        self.tabview = customtkinter.CTkTabview(self, width=250)
-        self.tabview.grid(row=0, rowspan=3, column=1, padx=(20, 20), pady=(20, 20), sticky="nsew")
-        self.tabview.add("Normal Vhilla")
-        self.tabview.add("Hard Vhilla")
-        self.tabview.tab("Normal Vhilla").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
-        self.tabview.tab("Hard Vhilla").grid_columnconfigure(0, weight=1)
+        # self.tabview = customtkinter.CTkTabview(self, width=250)
+        # self.tabview.grid(row=0, rowspan=3, column=1, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        # self.tabview.add("Normal Vhilla")
+        # self.tabview.add("Hard Vhilla")
+        # self.tabview.tab("Normal Vhilla").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview.tab("Hard Vhilla").grid_columnconfigure(0, weight=1)
+        # with classes
+        self.tab_view = MyTabView(master=self)
+        self.tab_view.grid(row=0, rowspan=3, column=1, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # Create labels for Vhilla within the tabs
         # self.label = customtkinter.CTkLabel(text="Test", master=self.tab("Hard Vhilla"))
@@ -131,7 +145,7 @@ class App(customtkinter.CTk):
         self.sidebar_button_1.configure(text="Vhilla Timer")
         self.sidebar_button_2.configure(state="disabled", text="(WIP) Rank Check")
         self.sidebar_button_3.configure(state="disabled", text="(WIP) Level ETA")
-        self.tabview.set("Hard Vhilla")
+        # self.tabview.set("Hard Vhilla")
         # self.checkbox_3.configure(state="disabled")
         # self.checkbox_1.select()
         # self.scrollable_frame_switches[0].select()
