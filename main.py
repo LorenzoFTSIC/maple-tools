@@ -29,7 +29,7 @@ class App(customtkinter.CTk):
         self.title("Eclisoul's Maple Tools")
         # self.geometry(f"{1100}x{580}")
         monitorX = GetSystemMetrics(0)
-        if monitorX > 1080:
+        if monitorX > 1920:
             print("Resolution higher than 1080p") 
             self.geometry(f"{1600}x{900}")
         else:
