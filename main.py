@@ -156,7 +156,7 @@ class App(customtkinter.CTk):
         self.sidebar_button_1.configure(text="Vhilla Timer")
         self.sidebar_button_2.configure(state="disabled", text="(WIP) Rank Check")
         self.sidebar_button_3.configure(state="disabled", text="(WIP) Level ETA")
-        # self.tabview.set("Hard Vhilla")
+        self.tab_view.set("Hard Vhilla")
         # self.checkbox_3.configure(state="disabled")
         # self.checkbox_1.select()
         # self.scrollable_frame_switches[0].select()
