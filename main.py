@@ -1,7 +1,11 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
+import imagerec
 from win32api import GetSystemMetrics
+
+
+# getCurHP(img)
 
 print("Width = ", GetSystemMetrics(0))
 print("Height = ", GetSystemMetrics(1))
@@ -187,6 +191,10 @@ class App(customtkinter.CTk):
 
     def sidebar_button_event(self):
         print("sidebar_button click")
+
+    def hVerus_button_event(self):
+        # getCurHP(img)
+        return
 
 
 if __name__ == "__main__":
