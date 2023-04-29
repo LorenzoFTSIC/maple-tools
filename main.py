@@ -32,10 +32,10 @@ class MyTabView(customtkinter.CTkTabview):
 
     def hVerusPercentage_event(self):
         result = imagerec.getCurHP("vellum3.jpg")
-        result.replace(" ", "")
-        
-        print(result)
-
+        # result.replace(" ", "")
+        # print(result.strip())
+        cleanedResult = result.strip()
+        self.hVerusPercentageText.configure(text=cleanedResult)
         return 
 
 class App(customtkinter.CTk):
