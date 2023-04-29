@@ -5,9 +5,11 @@ import numpy as np
 
 
 myconfig = r"--psm 8 --oem 3"
-img = cv2.imread("vellum3.jpg")
+# img = cv2.imread("vellum3.jpg")
 
 def getCurHP(img):
+
+    img = cv2.imread(img)
 
     #post processing of captured image to increase OCR accuracy
     scale_percent = 150 
@@ -31,19 +33,20 @@ def getCurHP(img):
 
 
     # string output of OCR rather than visualization
-    # test = pytesseract.image_to_string(img_processed, config=myconfig)
+    test = pytesseract.image_to_string(img_processed, config=myconfig)
     # print(test)
+    return test
 
 
     #visualization of result for development/debugging/testing
-    height, width = img_processed.shape
+    # height, width = img_processed.shape
 
-    boxes = pytesseract.image_to_boxes(img_processed, config=myconfig)
-    for box in boxes.splitlines():
-        box = box.split(" ")
-        print(box)
-        img_processed = cv2.rectangle(img_processed, (int(box[1]), height - int(box[2])), (int(box[3]), height-int(box[4])), (0,255,0), 2)
+    # boxes = pytesseract.image_to_boxes(img_processed, config=myconfig)
+    # for box in boxes.splitlines():
+    #     box = box.split(" ")
+    #     print(box)
+    #     img_processed = cv2.rectangle(img_processed, (int(box[1]), height - int(box[2])), (int(box[3]), height-int(box[4])), (0,255,0), 2)
 
-    cv2.imshow("img", img_processed)
-    cv2.waitKey(0)
+    # cv2.imshow("img", img_processed)
+    # cv2.waitKey(0)
 

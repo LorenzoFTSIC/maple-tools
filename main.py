@@ -21,9 +21,22 @@ class MyTabView(customtkinter.CTkTabview):
         self.add("Normal Vhilla")
         self.add("Hard Vhilla")
 
+        self.hVerusPercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.hVerusPercentage_event, text="Check Percentage")
+        self.hVerusPercentage.grid(row=1, column=0, padx=20, pady=10)
+        self.hVerusPercentageText = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text="test")
+        self.hVerusPercentageText.grid(row=1, column=1, padx=20, pady=10)
+
         # add widgets on tabs
         self.label = customtkinter.CTkLabel(master=self.tab("Normal Vhilla"))
         self.label.grid(row=0, column=0, padx=20, pady=10)
+
+    def hVerusPercentage_event(self):
+        result = imagerec.getCurHP("vellum3.jpg")
+        result.replace(" ", "")
+        
+        print(result)
+
+        return 
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -36,6 +49,7 @@ class App(customtkinter.CTk):
         if monitorX > 1920:
             print("Resolution higher than 1080p") 
             self.geometry(f"{1600}x{900}")
+            customtkinter.set_widget_scaling(1.5)
         else:
             print("Standard or smaller resolution")
             self.geometry(f"{1000}x{500}")
@@ -187,16 +201,15 @@ class App(customtkinter.CTk):
 
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
+        print(new_scaling_float)
         customtkinter.set_widget_scaling(new_scaling_float)
 
     def sidebar_button_event(self):
         print("sidebar_button click")
 
-    def hVerus_button_event(self):
-        # getCurHP(img)
-        return
 
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
