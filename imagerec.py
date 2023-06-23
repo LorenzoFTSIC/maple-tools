@@ -47,13 +47,40 @@ def calibrateBar():
         rectangles.append([int(x), int(y), int(w), int(h)])
         rectangles.append([int(x), int(y), int(w), int(h)])
     
-    print(len(rectangles))
 
     rectangles, weights = cv2.groupRectangles(rectangles, 1, 0.2)
 
+
+
     for (x, y, w, h) in rectangles:
         cv2.rectangle(img, (x, y), (x + w, y + h), (0,255,255), 2)
+        # print(x, y, w, h)
+
     
+    # boss portrait is stored in rectangles as indecies 0,1 is top left coordinates, and indecies 2,3 are X and Y length
+    # turned into dictionary using the following methadology
+    #top left = x,y        | [0], [1]
+    #top right = x+w, y      | [0]+[2], [1]
+    #bot left = x, y+h      | [0], [1]+[3]
+    #bot right = x+w, y+h   | [0]+[2], [1]+[3]
+
+    bossPortrait = {
+        "topLeft": [rectangles[0][0], rectangles[0][1]],
+        "topRight": [(rectangles[0][0] + rectangles[0][2]), rectangles[0][1]],
+        "botLeft": [rectangles[0][0], (rectangles[0][1] + rectangles[0][3])],
+        "botRight": [(rectangles[0][0] + rectangles[0][2]), (rectangles[0][1] + rectangles[0][3])],
+    }
+
+    print(bossPortrait["topLeft"], bossPortrait["topRight"], bossPortrait["botLeft"], bossPortrait["botRight"])
+
+
+
+
+    # print(bossPortrait)
+    # botLeftPortrait = bossPortrait[0]
+    # botRightPortrait = "(" + str(bossPortrait[0] + bossPortrait[2]) + "," + str(bossPortrait[1] + bossPortrait[3]) + ")"
+    # print(botRightPortrait)
+
 
     # scale_percent = 120 
     # width = int(result.shape[1] * scale_percent / 100)
