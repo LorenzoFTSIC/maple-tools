@@ -2,12 +2,14 @@ from PIL import Image
 import pytesseract
 import cv2
 import numpy as np
-
+import mss
 
 myconfig = r"--psm 8 --oem 3"
 # img = cv2.imread("vellum3.jpg")
 
-def calibrateBar():
+sct = mss.mss()
+
+def calibrateBar(sct):
     img = cv2.imread("vhilla.jpg")
     template = cv2.imread("vhillaTemplateFull.jpg")
     threshold = .90
@@ -69,11 +71,27 @@ def calibrateBar():
         "topRight": [(rectangles[0][0] + rectangles[0][2]), rectangles[0][1]],
         "botLeft": [rectangles[0][0], (rectangles[0][1] + rectangles[0][3])],
         "botRight": [(rectangles[0][0] + rectangles[0][2]), (rectangles[0][1] + rectangles[0][3])],
+        "healthOffsets": [4, 38]
+    }
+    # print(bossPortrait["topLeft"], bossPortrait["topRight"], bossPortrait["botLeft"], bossPortrait["botRight"])
+
+    #area of the health text % stored using reference to boss portrait
+    healthBox = {
+        "topLeft": [bossPortrait["topLeft"][0] + bossPortrait["healthOffsets"][0], bossPortrait["topLeft"][1] + bossPortrait["healthOffsets"][1]],
+        "offsets": [28, 10]
     }
 
-    print(bossPortrait["topLeft"], bossPortrait["topRight"], bossPortrait["botLeft"], bossPortrait["botRight"])
 
+    cv2.rectangle(img, (healthBox["topLeft"]), (healthBox["topLeft"][0] + healthBox["offsets"][0], healthBox["topLeft"][1] + healthBox["offsets"][1]), (0,255,255), 2)
 
+    
+    #offsets from boss portrait to text area
+    # [830, 163] [863, 163] [830, 196] [863, 196]
+    # [834, 201] [862, 201] [834, 211] [862, 211]
+    #  +04  +38 | +01  +38 | +04  +15 | -01  +15
+
+    #test using manual offsets for finding location of health text
+    # cv2.rectangle(img, (834, 201), (834 + 28, 201 + 10), (0,255,255), 2)
 
 
     # print(bossPortrait)
@@ -95,6 +113,9 @@ def calibrateBar():
     # cv2.waitKey(0)
     cv2.imshow("res", img)
     cv2.waitKey(0)
+    return healthBox
+
+
 
 
 def getCurHP(img):
@@ -141,5 +162,7 @@ def getCurHP(img):
     # cv2.imshow("img", img_processed)
     # cv2.waitKey(0)
 
-calibrateBar()
+# print(calibrateBar())
 # getCurHP("vellum4.jpg")
+
+
