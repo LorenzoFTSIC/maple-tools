@@ -9,10 +9,7 @@ myconfig = r"--psm 8 --oem 3"
 
 sct = mss.mss()
 
-def calibrateBar(sct):
-    img = cv2.imread("vhilla.jpg")
-    template = cv2.imread("vhillaTemplateFull.jpg")
-    threshold = .90
+def calibrateBar():
 
     # min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
     # cv2.rectangle(img,top_left, bottom_right, 255, 2)
@@ -32,9 +29,22 @@ def calibrateBar(sct):
     # kernel = np.ones((1, 1), np.uint8)
     # img = cv2.dilate(img, kernel, iterations=1)
     # img = cv2.erode(img, kernel, iterations=1)
+    dims = {
+        "left": 0,
+        "top": 0,
+        "width": 2560,
+        "height": 1440
+    }
+    scsht = sct.grab(dims)
+    scr = np.ascontiguousarray(scsht, dtype=np.uint8)
+    scr_remove = scr[:,:,:3]
+    # img = cv2.imread("vhilla.jpg")
+    template = cv2.imread("vhillaTemplateFull.jpg")
+    threshold = .90
 
     #-------Template matching
-    res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
+    res = cv2.matchTemplate(scr_remove.astype(np.uint8).copy(), template, cv2.TM_CCOEFF_NORMED)
+    # res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
 
     # min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
     w = template.shape[1]
@@ -42,7 +52,7 @@ def calibrateBar(sct):
     # result = cv2.rectangle(img, max_loc, (max_loc[0] + w, max_loc[1] + h), (255,255,0), 2)
 
     yloc, xloc = np.where(res >= threshold)
-
+    print(yloc, xloc)
 
     rectangles = []
     for (x,y) in zip(xloc, yloc):
@@ -55,9 +65,7 @@ def calibrateBar(sct):
 
 
     for (x, y, w, h) in rectangles:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0,255,255), 2)
-        # print(x, y, w, h)
-
+        cv2.rectangle(scr_remove, (x, y), (x + w, y + h), (0,255,255), 2)
     
     # boss portrait is stored in rectangles as indecies 0,1 is top left coordinates, and indecies 2,3 are X and Y length
     # turned into dictionary using the following methadology
@@ -82,7 +90,7 @@ def calibrateBar(sct):
     }
 
 
-    cv2.rectangle(img, (healthBox["topLeft"]), (healthBox["topLeft"][0] + healthBox["offsets"][0], healthBox["topLeft"][1] + healthBox["offsets"][1]), (0,255,255), 2)
+    cv2.rectangle(scr_remove, (healthBox["topLeft"]), (healthBox["topLeft"][0] + healthBox["offsets"][0], healthBox["topLeft"][1] + healthBox["offsets"][1]), (0,255,255), 2)
 
     
     #offsets from boss portrait to text area
@@ -111,11 +119,29 @@ def calibrateBar(sct):
     # print(res)
     # cv2.imshow("template_processed", template_processed)
     # cv2.waitKey(0)
-    cv2.imshow("res", img)
+    print(healthBox)
+    cv2.imshow("res", scr_remove)
     cv2.waitKey(0)
     return healthBox
 
+def getScreenShot(dimensions=[]):
+    print(dimensions)
+    test = {
+        "left": dimensions["topLeft"][0],
+        "top": dimensions["topLeft"][1],
+        "width": dimensions["offsets"][0],
+        "height": dimensions["offsets"][1]
+        # "left": 834,
+        # "top": 201,
+        # "width": 28,
+        # "height": 10
+    }
+    scr = np.array(sct.grab(test))
+    # scr_remove = scr[:,:,:3]
+    cv2.imshow("screen shot", scr)
+    cv2.waitKey(0)
 
+    return
 
 
 def getCurHP(img):
@@ -162,7 +188,9 @@ def getCurHP(img):
     # cv2.imshow("img", img_processed)
     # cv2.waitKey(0)
 
-# print(calibrateBar())
+print(calibrateBar())
+
+# dimensions = calibrateBar()
+# getScreenShot(dimensions)
+
 # getCurHP("vellum4.jpg")
-
-
