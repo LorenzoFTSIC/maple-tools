@@ -1,6 +1,7 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
+import time
 import imagerec
 from win32api import GetSystemMetrics
 
@@ -21,21 +22,53 @@ class MyTabView(customtkinter.CTkTabview):
         self.add("Normal Vhilla")
         self.add("Hard Vhilla")
 
+        self.hboxConfig = []
+        self.healthBox = []
+        self.bossCurHp = ""
+        self.flag = False
+
+        self.calibratePercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.calibrateBar_event, text="Calibrate Tool")
+        self.calibratePercentage.grid(row=1, column=0, padx=20, pady=10)
+
         self.hVerusPercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.hVerusPercentage_event, text="Check Percentage")
-        self.hVerusPercentage.grid(row=1, column=0, padx=20, pady=10)
-        self.hVerusPercentageText = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text="test")
-        self.hVerusPercentageText.grid(row=1, column=1, padx=20, pady=10)
+        self.hVerusPercentage.grid(row=2, column=0, padx=20, pady=10)
+        self.hVerusPercentageText = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text="Configure ")
+        self.hVerusPercentageText.grid(row=2, column=1, padx=20, pady=10)
+
+        self.flagStatusBtn = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.toggleFlag_event, text="Pause/start")
+        self.flagStatusBtn.grid(row=3, column=0, padx=20, pady=10)
+        self.flagStatus = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text=self.flag)
+        self.flagStatus.grid(row=3, column=1, padx=20, pady=10)
 
         # add widgets on tabs
         self.label = customtkinter.CTkLabel(master=self.tab("Normal Vhilla"))
         self.label.grid(row=0, column=0, padx=20, pady=10)
 
+    def toggleFlag_event(self):
+        if self.flag == False:
+            self.flag = True
+            self.flagStatus.configure(text=self.flag)
+        else:
+            self.flag = False
+            self.flagStatus.configure(text=self.flag)
+        return
+
+    def calibrateBar_event(self):
+        self.hboxConfig = imagerec.calibrateBar()
+        return
+
     def hVerusPercentage_event(self):
-        result = imagerec.getCurHP("vellum3.jpg")
-        # result.replace(" ", "")
-        # print(result.strip())
-        cleanedResult = result.strip()
-        self.hVerusPercentageText.configure(text=cleanedResult)
+        while self.flag == True:
+            print(self.hboxConfig)
+            self.healthBox = imagerec.getScreenShot(self.hboxConfig)
+            self.bossCurHp = imagerec.getCurHP(self.healthBox)
+            self.bossCurHp = self.bossCurHp.replace(" ", "")
+            self.bossCurHp = self.bossCurHp.replace("%", "")
+            self.bossCurHp = self.bossCurHp.replace("\n", "")
+            # self.bossCurHp = self.bossCurHp.strip("%")
+            displayHp = self.bossCurHp + "%"
+            self.hVerusPercentageText.configure(text=displayHp)
+            time.sleep(1)
         return 
 
 class App(customtkinter.CTk):

@@ -156,8 +156,8 @@ def getCurHP(img):
 
     img = cv2.resize(img, dim, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
 
-    cv2.imshow("resized", img)
-    cv2.waitKey(0)
+    # cv2.imshow("resized", img)
+    # cv2.waitKey(0)
 
     img_processed = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # img_processed = cv2.medianBlur(img_processed, 3)
@@ -165,8 +165,8 @@ def getCurHP(img):
     threshold, img_processed = cv2.threshold(img_processed, 140, 255, cv2.THRESH_BINARY )
 
     
-    cv2.imshow("processed", img_processed)
-    cv2.waitKey(0)
+    # cv2.imshow("processed", img_processed)
+    # cv2.waitKey(0)
 
 
     #post processing options not used
@@ -191,14 +191,15 @@ def getCurHP(img):
 
     # cv2.imshow("img", img_processed)
     # cv2.waitKey(0)
+    return test
 
 
-calibratedDims = calibrateBar()
-print(calibratedDims)
-healthBox = getScreenShot(calibratedDims)
-# print(healthBox)
-displayHP = getCurHP(healthBox)
-print(displayHP)
+# calibratedDims = calibrateBar()
+# print(calibratedDims)
+# healthBox = getScreenShot(calibratedDims)
+# # print(healthBox)
+# displayHP = getCurHP(healthBox)
+# print(displayHP)
 
 
 # dimensions = calibrateBar()
