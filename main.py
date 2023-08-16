@@ -2,6 +2,7 @@ import tkinter
 import tkinter.messagebox
 import customtkinter
 import time
+import threading
 import imagerec
 from win32api import GetSystemMetrics
 
@@ -18,6 +19,8 @@ class MyTabView(customtkinter.CTkTabview):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
+
+
         # create tabs
         self.add("Normal Vhilla")
         self.add("Hard Vhilla")
@@ -25,17 +28,18 @@ class MyTabView(customtkinter.CTkTabview):
         self.hboxConfig = []
         self.healthBox = []
         self.bossCurHp = ""
-        self.flag = False
+        self.flag = True
 
         self.calibratePercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.calibrateBar_event, text="Calibrate Tool")
         self.calibratePercentage.grid(row=1, column=0, padx=20, pady=10)
 
-        self.hVerusPercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.hVerusPercentage_event, text="Check Percentage")
+        # self.hVerusPercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.hVerusPercentage_event, text="Check Percentage")
+        self.hVerusPercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=threading.Thread(target=self.hVerusPercentage_event).start, text="Check Percentage")
         self.hVerusPercentage.grid(row=2, column=0, padx=20, pady=10)
         self.hVerusPercentageText = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text="Configure ")
         self.hVerusPercentageText.grid(row=2, column=1, padx=20, pady=10)
 
-        self.flagStatusBtn = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.toggleFlag_event, text="Pause/start")
+        self.flagStatusBtn = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.toggleFlag_event, text="Stop")
         self.flagStatusBtn.grid(row=3, column=0, padx=20, pady=10)
         self.flagStatus = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text=self.flag)
         self.flagStatus.grid(row=3, column=1, padx=20, pady=10)
@@ -47,10 +51,9 @@ class MyTabView(customtkinter.CTkTabview):
     def toggleFlag_event(self):
         if self.flag == False:
             self.flag = True
-            self.flagStatus.configure(text=self.flag)
-        else:
+        else:  
             self.flag = False
-            self.flagStatus.configure(text=self.flag)
+        self.flagStatus.configure(text=self.flag)
         return
 
     def calibrateBar_event(self):
@@ -58,7 +61,9 @@ class MyTabView(customtkinter.CTkTabview):
         return
 
     def hVerusPercentage_event(self):
+        print("event triggered")
         while self.flag == True:
+            print("test")
             print(self.hboxConfig)
             self.healthBox = imagerec.getScreenShot(self.hboxConfig)
             self.bossCurHp = imagerec.getCurHP(self.healthBox)
@@ -69,7 +74,7 @@ class MyTabView(customtkinter.CTkTabview):
             displayHp = self.bossCurHp + "%"
             self.hVerusPercentageText.configure(text=displayHp)
             time.sleep(1)
-        return 
+        return
 
 class App(customtkinter.CTk):
     def __init__(self):

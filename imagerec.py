@@ -11,20 +11,6 @@ sct = mss.mss()
 
 def calibrateBar():
 
-    # min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-    # cv2.rectangle(img,top_left, bottom_right, 255, 2)
-
-
-
-
-    # img_processed = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # template_processed = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
-    # threshold, img_processed = cv2.threshold(img_processed, 150, 255, cv2.THRESH_BINARY )
-
-    # img_processed = cv2.Canny(img_processed, 50, 150, apertureSize= 5, L2gradient=True)
-    # img_processed = cv2.medianBlur(img_processed, 1)
-
-
     #post processing options not used
     # kernel = np.ones((1, 1), np.uint8)
     # img = cv2.dilate(img, kernel, iterations=1)
@@ -33,18 +19,16 @@ def calibrateBar():
         "left": 0,
         "top": 0,
         "width": 2560,
-        "height": 1440
+        "height": 1440,
     }
     template = cv2.imread('vhillaTemplateFull.jpg')
     scr = np.array(sct.grab(dims))
     scr_remove = scr[:,:,:3]
     # scr_remove = np.ascontiguousarray(scsht, dtype=np.uint8)
     # scr_remove = np.uint8(scsht)
-    # scr_remove = scr[:,:,:3]
-    # img = cv2.imread("vhilla.jpg")
     threshold = .90
 
-    #-------Template matching
+    #-------Template matching to locate boss portrait
     res = cv2.matchTemplate(scr_remove, template, cv2.TM_CCOEFF_NORMED)
     # res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
 
@@ -126,6 +110,7 @@ def calibrateBar():
     return healthBox
 
 def getScreenShot(dimensions=[]):
+    sct = mss.mss()
     dims = {
         "left": dimensions["topLeft"][0],
         "top": dimensions["topLeft"][1],
