@@ -19,8 +19,6 @@ class MyTabView(customtkinter.CTkTabview):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-
-
         # create tabs
         self.add("Normal Vhilla")
         self.add("Hard Vhilla")
@@ -30,23 +28,43 @@ class MyTabView(customtkinter.CTkTabview):
         self.bossCurHp = ""
         self.flag = True
 
+        self.timerDisplay = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text=f"Time remaining: {1800}")
+        self.timerDisplay.grid(row=0, column=1, padx= 20, pady=10)
+
         self.calibratePercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.calibrateBar_event, text="Calibrate Tool")
-        self.calibratePercentage.grid(row=1, column=0, padx=20, pady=10)
+        self.calibratePercentage.grid(row=1, column=1, padx=20, pady=10)
 
         # self.hVerusPercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.hVerusPercentage_event, text="Check Percentage")
         self.hVerusPercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=threading.Thread(target=self.hVerusPercentage_event).start, text="Check Percentage")
-        self.hVerusPercentage.grid(row=2, column=0, padx=20, pady=10)
+        self.hVerusPercentage.grid(row=2, column=1, padx=20, pady=10)
         self.hVerusPercentageText = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text="Configure ")
-        self.hVerusPercentageText.grid(row=2, column=1, padx=20, pady=10)
+        self.hVerusPercentageText.grid(row=2, column=2, padx=20, pady=10)
 
         self.flagStatusBtn = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.toggleFlag_event, text="Stop")
-        self.flagStatusBtn.grid(row=3, column=0, padx=20, pady=10)
+        self.flagStatusBtn.grid(row=3, column=1, padx=20, pady=10)
         self.flagStatus = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text=self.flag)
-        self.flagStatus.grid(row=3, column=1, padx=20, pady=10)
+        self.flagStatus.grid(row=3, column=2, padx=20, pady=10)
 
         # add widgets on tabs
         self.label = customtkinter.CTkLabel(master=self.tab("Normal Vhilla"))
         self.label.grid(row=0, column=0, padx=20, pady=10)
+
+    def mainTimer_event(self):
+        totalSeconds = 1800
+        while totalSeconds > 0:
+            #implement test calc function
+            minutesLeft , secondsLeft = divmod(totalSeconds, 60)
+            print(f"Minutes remaining: {minutesLeft}, seconds remaining: {secondsLeft}")
+            #add function for displaying text showing when next test is
+            totalSeconds -= 1
+            MyTabView.update()
+            time.sleep(1)
+        
+        return
+    
+    def findNextTest_event(self):
+        # make function for deciding at how many seconds the next vhilla test is
+        return
 
     def toggleFlag_event(self):
         if self.flag == False:
