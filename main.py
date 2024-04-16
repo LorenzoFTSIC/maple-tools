@@ -5,6 +5,7 @@ import time
 import threading
 import imagerec
 from win32api import GetSystemMetrics
+from tktooltip import ToolTip
 
 
 # getCurHP(img)
@@ -22,13 +23,15 @@ class MyTabView(customtkinter.CTkTabview):
         # create tabs
         self.add("Normal Vhilla")
         self.add("Hard Vhilla")
+        self.configure(state="disabled")
 
         self.hboxConfig = []
         self.healthBox = []
         self.bossCurHp = ""
         self.flag = True
+        self.totalSeconds = 1800
 
-        self.timerDisplay = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text=f"Time remaining: {1800}")
+        self.timerDisplay = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text=f"Time remaining: {self.totalSeconds}")
         self.timerDisplay.grid(row=0, column=1, padx= 20, pady=10)
 
         self.calibratePercentage = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=self.calibrateBar_event, text="Calibrate Tool")
@@ -45,19 +48,30 @@ class MyTabView(customtkinter.CTkTabview):
         self.flagStatus = customtkinter.CTkLabel(self.tab("Hard Vhilla"), text=self.flag)
         self.flagStatus.grid(row=3, column=2, padx=20, pady=10)
 
-        # add widgets on tabs
-        self.label = customtkinter.CTkLabel(master=self.tab("Normal Vhilla"))
+        self.hVerusTimer = customtkinter.CTkButton(self.tab("Hard Vhilla"), command=threading.Thread(target=self.mainTimer_event).start, text="Start Timer")
+        self.hVerusTimer.grid(row=4, column=1, padx=20, pady=10)
+
+
+        # add widgets on tabs 
+        #below adds text onto the normal vhilla tab
+        self.label = customtkinter.CTkLabel(master=self.tab("Normal Vhilla"), text="test")
         self.label.grid(row=0, column=0, padx=20, pady=10)
 
     def mainTimer_event(self):
-        totalSeconds = 1800
-        while totalSeconds > 0:
+        while self.totalSeconds > 0 and self.flag == True:
+            self.healthBox = imagerec.getScreenShot(self.hboxConfig)
+            self.bossCurHp = imagerec.getCurHP(self.healthBox)
+            self.bossCurHp = self.bossCurHp.replace(" ", "")
+            self.bossCurHp = self.bossCurHp.replace("%", "")
+            self.bossCurHp = self.bossCurHp.replace("\n", "")
+            displayHp = self.bossCurHp + "%"
+            self.hVerusPercentageText.configure(text=displayHp)
             #implement test calc function
-            minutesLeft , secondsLeft = divmod(totalSeconds, 60)
+            minutesLeft , secondsLeft = divmod(self.totalSeconds, 60)
             print(f"Minutes remaining: {minutesLeft}, seconds remaining: {secondsLeft}")
             #add function for displaying text showing when next test is
-            totalSeconds -= 1
-            MyTabView.update()
+            self.totalSeconds -= 1.045
+            # MyTabView.update()
             time.sleep(1)
         
         return
@@ -79,16 +93,13 @@ class MyTabView(customtkinter.CTkTabview):
         return
 
     def hVerusPercentage_event(self):
-        print("event triggered")
         while self.flag == True:
-            print("test")
             print(self.hboxConfig)
             self.healthBox = imagerec.getScreenShot(self.hboxConfig)
             self.bossCurHp = imagerec.getCurHP(self.healthBox)
             self.bossCurHp = self.bossCurHp.replace(" ", "")
             self.bossCurHp = self.bossCurHp.replace("%", "")
             self.bossCurHp = self.bossCurHp.replace("\n", "")
-            # self.bossCurHp = self.bossCurHp.strip("%")
             displayHp = self.bossCurHp + "%"
             self.hVerusPercentageText.configure(text=displayHp)
             time.sleep(1)
@@ -109,6 +120,8 @@ class App(customtkinter.CTk):
         else:
             print("Standard or smaller resolution")
             self.geometry(f"{1000}x{500}")
+
+
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -159,6 +172,7 @@ class App(customtkinter.CTk):
         # with classes
         self.tab_view = MyTabView(master=self)
         self.tab_view.grid(row=0, rowspan=3, column=1, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        
 
         # Create labels for Vhilla within the tabs
         # self.label = customtkinter.CTkLabel(text="Test", master=self.tab("Hard Vhilla"))
@@ -226,10 +240,13 @@ class App(customtkinter.CTk):
         # self.checkbox_3 = customtkinter.CTkCheckBox(master=self.checkbox_slider_frame)
         # self.checkbox_3.grid(row=3, column=0, pady=20, padx=20, sticky="n")
 
+
+
         # set default values
         self.sidebar_button_1.configure(text="Vhilla Timer")
         self.sidebar_button_2.configure(state="disabled", text="(WIP) Rank Check")
         self.sidebar_button_3.configure(state="disabled", text="(WIP) Level ETA")
+        # self.add("Normal Vhilla")
         self.tab_view.set("Hard Vhilla")
         # self.checkbox_3.configure(state="disabled")
         # self.checkbox_1.select()
